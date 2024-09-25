@@ -36,20 +36,15 @@ main{
 }
 
 .projectNumber{
-  align-self: center;
   font-size: .75rem;
   padding: 30px;
   font-weight: 500;
 }
 
-.inputMeme{
+.form{
   display: grid;
-  grid-template: 100% 100% / 1fr 1fr;
+  grid-template: 40px 40px / 1fr 1fr;
   gap: 17px;
-}
-
-.form label{
-  margin-bottom: 5px;
 }
 
 .topInput{
@@ -75,5 +70,11 @@ main{
   color: white;
   border: none;
   cursor: pointer;
+}
+
+
+
+.memeImage{
+  max-width: 100%;
 }
 
