@@ -1,5 +1,4 @@
-import memesData from '../memesData.js'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Meme = () => {
     const [meme, setMeme] = useState({
@@ -8,13 +7,31 @@ const Meme = () => {
         randomImage: "http://i.imgflip.com/1bij.jpg"
     })
 
-    const [allMemeImages, setAllMemes] = useState(memesData)
+    function handleChange(event){
+        const {name, value} = event.target;
+        setMeme(prevMeme =>({
+            ...prevMeme,
+            [name]: value
+        }))
+    }
 
+    
+    console.log(meme);
+
+    const [allMemes, setAllMemes] = useState([])
+
+    useEffect(() => {
+        console.log("Effect is rendered!")
+        fetch("https://api.imgflip.com/get_memes")
+        .then(res => res.json())
+        .then(data => setAllMemes(data.data.memes))
+    }, [])
+
+    console.log(allMemes);
 
     function getMemeImage(){
-        const memesArray = allMemeImages.data.memes;
-        const randomNumber = Math.floor(Math.random() * memesArray.length);
-        const url = memesArray[randomNumber].url;
+        const randomNumber = Math.floor(Math.random() * allMemes.length);
+        const url = allMemes[randomNumber].url;
         setMeme(prevMeme => ({
             ...prevMeme,
             randomImage: url
@@ -22,16 +39,22 @@ const Meme = () => {
     }
   return (
     <main>
-            <div className="form">
+            <div className="form" >
                 <input 
                     type="text"
                     placeholder="Top text"
-                    className="topInput"
+                    className="formInput"
+                    name = "topText"
+                    onChange = {handleChange}
+                    value = {meme.topText}
                 />
                 <input 
                     type="text"
                     placeholder="Bottom text"
-                    className="bottomInput"
+                    className="formInput"
+                    name = "bottomText"
+                    onChange = {handleChange}
+                    value = {meme.bottomText}
                 />
                 <button 
                     className="formButton"
@@ -40,8 +63,12 @@ const Meme = () => {
                     Get a new meme image 🖼
                 </button>
             </div>
-            <img src = {meme.randomImage} className = "memeImage"></img>
-        </main>
+            <div className="meme">
+                <img src={meme.randomImage} className="memeImage" />
+                <h2 className="meme--text top">{meme.topText}</h2>
+                <h2 className="meme--text bottom">{meme.bottomText}</h2>
+            </div>        
+    </main>
   )
 }
 
